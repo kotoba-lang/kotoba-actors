@@ -1,0 +1,17 @@
+{:project/name "kotoba-actors"
+ :project/org "kotoba-lang"
+ :project/language :clojure
+ :project/role :shared-actor-datom-library
+ :migration/source "etzhayyim/root/20-actors/kotoba-actors-clj"
+ :migration/history-preserved true
+ :data-boundary
+ {:ownership :actor-repositories
+  :lookup "orgs/etzhayyim/com-etzhayyim-<actor>"
+  :override-env "KOTOBA_ACTORS_ETZHAYYIM_ROOT"
+  :library-writes-actor-data false}
+ :format-policy
+ {:canonical #{:edn}
+  :external-wire-only #{:json :jsonl :json-ld}}
+ :deprecated-languages
+ {:go :pruned
+  :tinygo :pruned}}

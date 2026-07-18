@@ -1,9 +1,6 @@
 {:paths ["src"]
- ;; kotoba-actors-clj — a PARALLEL Clojure / kotoba-datomic refactor of the
- ;; etzhayyim Python actors (kabuto 兜 / uchiwake 内訳). The Python actors under
- ;; etzhayyim/root/20-actors/{kabuto,uchiwake}/ are LEFT UNTOUCHED — this project
- ;; only READS their seed EDN + reuses their pure .cljc ports on the classpath,
- ;; and adds a Datom/EAVT + datalog refactor layer in src/.
+ ;; Shared Clojure/Datom projection and analysis helpers. Actor-owned seed EDN
+ ;; is read from flat west sibling repos under orgs/etzhayyim.
  :deps {org.clojure/clojure {:mvn/version "1.12.0"}}
  :aliases
  {:test
