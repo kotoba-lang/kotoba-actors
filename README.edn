@@ -8,7 +8,11 @@
  {:ownership :actor-repositories
   :lookup "orgs/etzhayyim/com-etzhayyim-<actor>"
   :override-env "KOTOBA_ACTORS_ETZHAYYIM_ROOT"
-  :library-writes-actor-data false}
+  :library-writes-actor-data false
+  :query-location :local
+  :remote-query-capability false
+  :public-seed-policy :explicit-classification-required
+  :private-runtime-policy :kagi-chunked-edn-via-host}
  :format-policy
  {:canonical #{:edn}
   :external-wire-only #{:json :jsonl :json-ld}}
