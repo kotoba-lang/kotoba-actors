@@ -1,6 +1,7 @@
 (ns kotoba-actors.asobi-test
   (:require [clojure.test :refer [deftest is testing]]
             [kotoba-actors.asobi :as asobi]
+            [kotoba-actors.config :as config]
             [kotoba-actors.datomic :as d]))
 
 ;; Exact counts discovered from the seed (35 nodes / 32 edges):
@@ -29,8 +30,11 @@
 ;; and the IMSLP scores (2 results). Shared ?e joins the two triple-patterns.
 (deftest engine-q-join
   (testing "d/q joins two clauses on a shared logic var"
-    (let [root (or (System/getenv "ETZHAYYIM_ASOBI_ROOT") "../com-etzhayyim-asobi")
-          db (d/db-from-seed (str root "/data/seed-asobi-graph.kotoba.edn"))]
+    ;; Was `(System/getenv "ETZHAYYIM_ASOBI_ROOT")` defaulting to the
+    ;; cwd-relative "../com-etzhayyim-asobi" — JVM-only, and wrong from any
+    ;; directory but one. `config/asobi-seed` is the same file, resolved the
+    ;; same way the sibling tests in this repo already resolve it.
+    (let [db (d/db-from-seed config/asobi-seed)]
       (is (= #{["play.work.beethoven-9"] ["play.work.imslp-scores"]}
              (d/q '{:find [?e]
                     :where [[?e :work/access :public-domain]

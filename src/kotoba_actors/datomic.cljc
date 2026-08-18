@@ -24,16 +24,52 @@
     (q '{:find [?e] :in [?k] :where [[?e :organism/kind ?k]]} db :species)
   - EVERY row becomes datoms — a row WITHOUT a `*/id` key (edge / 縁 rows keyed
     on :en/from + :en/to) gets a deterministic synthetic entity id, so edges are
-    first-class queryable datoms (no need to fall back to raw `load-rows`)."
-  (:require [clojure.edn :as edn]))
+    first-class queryable datoms (no need to fall back to raw `load-rows`).
+
+  ── PORTABILITY ───────────────────────────────────────────────────────────────
+  The engine — `rows->datoms`, `build-db`, `q` and everything private under
+  them — is pure: rows in, datoms in, answers out, no host. The only host edge
+  is `load-rows`, which reads a file, and it is a real one: unlike a registry
+  library, this library's data is NOT in this repository (see
+  `kotoba-actors.config`), so there is nothing here to compile in. The read is
+  `slurp` on the JVM and `node:fs` under ClojureScript, and both take the
+  ABSOLUTE path `kotoba-actors.config` hands them — not a path relative to the
+  process's working directory, which is the trap a cwd-relative resource read
+  falls into the moment the library stops being the root project.
+
+  ── NIL IS NOT EMPTY ──────────────────────────────────────────────────────────
+  `(reduce f {} nil)` yields `{}` and `(map-indexed f nil)` yields `()`, so a
+  db built from rows that were never read would answer 0 to every count and
+  `#{}` to every query — a complete-looking index over no data, indistinguishable
+  from a graph that is genuinely empty. So: `load-rows` REFUSES a nil path
+  rather than reading nothing; `rows->datoms` and `build-db` propagate nil; and
+  `q` refuses a nil db. An empty db (`{}`, from an empty seed) still answers
+  normally — the distinction being kept is between \"nothing there\" and
+  \"nobody looked\"."
+  (:require [clojure.edn :as edn]
+            [clojure.string :as str]
+            #?(:cljs ["node:fs" :as fs])))
 
 ;; ── ingest ───────────────────────────────────────────────────────────────────
 
+(defn read-text
+  "Read PATH as text. The one host edge in this namespace."
+  [path]
+  #?(:clj (slurp path)
+     :cljs (.toString (fs/readFileSync path))))
+
 (defn load-rows
   "Read a kotoba-EDN seed file (a single top-level vector of entity maps).
-  Returns the vector of maps. (This edge is allowed to do file I/O.)"
+  Returns the vector of maps. (This edge is allowed to do file I/O.)
+
+  Refuses a nil path. `kotoba-actors.config/actor-seed` answers nil when it
+  does not know where the sibling checkouts are, and reading nothing there
+  would hand back an empty seed that reads exactly like a real empty one."
   [path]
-  (edn/read-string (slurp path)))
+  (when (nil? path)
+    (throw (ex-info "kotoba-actors: no seed path — the sibling-checkout root is unknown; set KOTOBA_ACTORS_ETZHAYYIM_ROOT"
+                    {:kotoba-actors/problem :unresolved-seed-path})))
+  (edn/read-string (read-text path)))
 
 (defn rows->datoms
   "Flatten entity-map rows into a seq of [e a v] datoms.
@@ -49,32 +85,34 @@
   `:db/id` (a tempid, e.g. added by the repo-wide EDN->tx-data 'datomize' pass,
   manifest/edn-datomize.cljs) alongside their domain `*/id`. `:db/id` is
   intentionally EXCLUDED from `*/id`-key candidacy — `(name :db/id)` is \"id\"
-  and would otherwise match `.endsWith … \"id\"` and get picked as the row's
+  and would otherwise match `str/ends-with? … \"id\"` and get picked as the row's
   identity, replacing the real domain id (e.g. :organism/id's string value)
   with a numeric tempid and silently breaking id-based joins (e.g.
   kotoba-actors.tsugite/dangling-edges comparing node ids against 縁
   endpoint strings). It is also excluded from becoming a datom itself
   (bookkeeping only, not domain data)."
   [rows]
-  (apply concat
-   (map-indexed
-    (fn [idx row]
-      (let [id-k (some #(when (and (not= % :db/id) (.endsWith (name %) "id")) %) (keys row))
-            e    (if id-k (get row id-k) (keyword "kotoba-actors.row" (str idx)))]
-        (for [[k v] row :when (not (#{id-k :db/id} k))] [e k v])))
-    rows)))
+  (when (some? rows)
+    (apply concat
+           (map-indexed
+            (fn [idx row]
+              (let [id-k (some #(when (and (not= % :db/id) (str/ends-with? (name %) "id")) %) (keys row))
+                    e    (if id-k (get row id-k) (keyword "kotoba-actors.row" (str idx)))]
+                (for [[k v] row :when (not (#{id-k :db/id} k))] [e k v])))
+            rows))))
 
 (defn build-db
   "Build an EAVT-indexed db from a seq of [e a v] datoms. Shape is your choice
   (e.g. {:eav {e {a #{v}}} :aev {a {e #{v}}} :ave {a {v #{e}}}}) as long as `q`
   can answer triple-pattern joins against it."
   [datoms]
-  (let [index (fn [acc [e a v]]
-                (-> acc
-                    (update-in [:eav e a] (fnil conj #{}) v)
-                    (update-in [:aev a e] (fnil conj #{}) v)
-                    (update-in [:ave a v] (fnil conj #{}) e)))]
-    (reduce index {} datoms)))
+  (when (some? datoms)
+    (let [index (fn [acc [e a v]]
+                  (-> acc
+                      (update-in [:eav e a] (fnil conj #{}) v)
+                      (update-in [:aev a e] (fnil conj #{}) v)
+                      (update-in [:ave a v] (fnil conj #{}) e)))]
+      (reduce index {} datoms))))
 
 (defn db-from-seed
   "Convenience: path -> rows -> datoms -> db."
@@ -84,7 +122,7 @@
 ;; ── query ─────────────────────────────────────────────────────────────────────
 
 (defn- lvar? [x]
-  (and (symbol? x) (.startsWith (name x) "?")))
+  (and (symbol? x) (str/starts-with? (name x) "?")))
 
 (defn- wildcard? [x] (= x '_))
 
@@ -151,6 +189,9 @@
   Optional `:in [?x ...]` binds the trailing `inputs` before the where-clauses
   run. Returns a set of result tuples (vectors aligned to :find)."
   [query db & inputs]
+  (when (nil? db)
+    (throw (ex-info "kotoba-actors: query against a nil db — no data was loaded, which is not the same as an empty graph"
+                    {:kotoba-actors/problem :nil-db :query query})))
   (let [find-syms (:find query)
         in-syms   (:in query)
         init      (if (seq in-syms) (zipmap in-syms inputs) {})
