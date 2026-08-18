@@ -8,6 +8,7 @@
     instruments 3 · screens 6 · criteria 8 · sources 7 · orgs 8 · milestones 2
     total 縁 edge rows 77 · dangling endpoints {} (closure holds)."
   (:require [clojure.test :refer [deftest is testing]]
+            [kotoba-actors.config :as config]
             [kotoba-actors.tanemaki :as t]
             [kotoba-actors.datomic :as d]))
 
@@ -30,8 +31,9 @@
 
 (deftest engine-q-join-sanity
   (testing "engine-only 2-clause join: every :screen node also has a :screen/code"
-    (let [root (or (System/getenv "ETZHAYYIM_TANEMAKI_ROOT") "../com-etzhayyim-tanemaki")
-          db (d/db-from-seed (str root "/data/seed-stewardship-graph.kotoba.edn"))
+    ;; Was `(System/getenv "ETZHAYYIM_TANEMAKI_ROOT")` over a cwd-relative
+    ;; default — JVM-only and directory-dependent. Same file, via config.
+    (let [db (d/db-from-seed config/tanemaki-seed)
           screens (d/q '{:find [?e ?code]
                          :where [[?e :fs/kind :screen]
                                  [?e :screen/code ?code]]}

@@ -10,6 +10,7 @@
   seed, so it should PASS even while the actor is unimplemented (it pins that the
   engine + seed wiring is correct)."
   (:require [clojure.test :refer [deftest is testing]]
+            [kotoba-actors.config :as config]
             [kotoba-actors.datomic :as d]
             [kotoba-actors.inochi :as inochi]))
 
@@ -33,8 +34,9 @@
 
 (deftest q-join-sanity
   (testing "direct engine 2-clause join over the real seed: CR + animalia species"
-    (let [root (or (System/getenv "ETZHAYYIM_INOCHI_ROOT") "../com-etzhayyim-inochi")
-          db (d/db-from-seed (str root "/data/seed-biosphere-graph.kotoba.edn"))
+    ;; Was `(System/getenv "ETZHAYYIM_INOCHI_ROOT")` over a cwd-relative
+    ;; default — JVM-only and directory-dependent. Same file, via config.
+    (let [db (d/db-from-seed config/inochi-seed)
           ;; join: same ?e must be both kingdom=animalia AND iucn=CR, project label
           res (d/q '{:find  [?label]
                      :where [[?e :taxon/kingdom :animalia]

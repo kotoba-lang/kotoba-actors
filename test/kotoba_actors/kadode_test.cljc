@@ -1,6 +1,7 @@
 (ns kotoba-actors.kadode-test
   (:require [clojure.test :refer [deftest is testing]]
             [kotoba-actors.kadode :as kadode]
+            [kotoba-actors.config :as config]
             [kotoba-actors.datomic :as d]))
 
 ;; EXACT counts discovered from the seed (36 node rows + 44 edge rows = 80 total).
@@ -26,8 +27,10 @@
 
 ;; Engine-only sanity: ONE direct 2-clause join via d/q (no actor stubs).
 (deftest engine-q-join-sanity
-  (let [db (d/db-from-seed
-            "/Users/junkawasaki/github/com-junkawasaki/orgs/etzhayyim/root/orgs/etzhayyim/com-etzhayyim-kadode/data/seed-resignation-graph.kotoba.edn")]
+  ;; Was one developer's absolute path, hardcoded, pointing at a layout
+  ;; (`etzhayyim/root/orgs/etzhayyim/...`) that no longer exists. Same file,
+  ;; via config — which is where every other kadode test already gets it.
+  (let [db (d/db-from-seed config/kadode-seed)]
     (testing "2-clause join: scenario node with :fixed-term employment"
       (is (= #{["sc.fixed-within-1yr"]}
              (d/q {:find '[?e]
