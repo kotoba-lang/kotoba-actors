@@ -47,7 +47,7 @@
   normally — the distinction being kept is between \"nothing there\" and
   \"nobody looked\"."
   (:require [clojure.edn :as edn]
-            [clojure.string :as str]
+            [kotoba.lang.text :as str]
             #?(:cljs ["node:fs" :as fs])))
 
 ;; ── ingest ───────────────────────────────────────────────────────────────────
