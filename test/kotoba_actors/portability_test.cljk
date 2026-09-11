@@ -3,7 +3,7 @@
   which nothing else in this suite touches.
 
   Every test here exists because a mutation survived. The first blind run of
-  `tools/mutate.cljs` — written against the source, before these were — killed
+  `tools/mutate.cljk` — written against the source, before these were — killed
   4 of 10 and left 6 standing; five of those six are covered below, and the
   sixth is the ClojureScript half of a reader conditional that a JVM-driven
   harness structurally cannot see (it is recorded in `tools/mutations.edn`
