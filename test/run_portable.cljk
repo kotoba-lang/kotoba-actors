@@ -1,4 +1,4 @@
-#!/usr/bin/env nbb
+#!/usr/bin/env kbb
 ;; The portable suite on nbb — no build step, no JVM.
 ;;
 ;; This file is the point of the `.cljc` conversion. Reader conditionals that
@@ -6,7 +6,7 @@
 ;; appearance of it, and a `:cljs` branch nothing runs is a check that cannot
 ;; fail.
 ;;
-;;   nbb --classpath src:test test/run_portable.cljk
+;;   kbb --backend sci --classpath src:test test/run_portable.cljk
 ;;
 ;; ## It does not have to run from the repo root
 ;;
@@ -14,7 +14,7 @@
 ;; from SIBLING west checkouts by absolute path (see `kotoba-actors.config`),
 ;; so the working directory does not enter into it. Run it from anywhere:
 ;;
-;;   cd /tmp/elsewhere && nbb --classpath <repo>/src:<repo>/test \
+;;   cd /tmp/elsewhere && kbb --backend sci --classpath <repo>/src:<repo>/test \
 ;;     <repo>/test/run_portable.cljk
 ;;
 ;; ## What needs data and what does not
