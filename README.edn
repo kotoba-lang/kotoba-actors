@@ -24,12 +24,12 @@
  ;; the JVM and on nbb with identical results.
  :portability
  {:runtimes #{:clj :cljs}
-  :suite {:jvm "clojure -M:test -m cognitect.test-runner"
-          :nbb "nbb --classpath src:test test/run_portable.cljk"}
-  :mutation-harness {:preflight "nbb tools/check-mutations.cljk"
-                     :run "nbb tools/mutate.cljk"
+  :suite {:jvm "kbb -M:test -m cognitect.test-runner"
+          :nbb "kbb --backend sci --classpath src:test test/run_portable.cljk"}
+  :mutation-harness {:preflight "kbb --backend sci tools/check-mutations.cljk"
+                     :run "kbb --backend sci tools/mutate.cljk"
                      :run-under-nbb
-                     "MUTATE_CMD='nbb --classpath src:test test/run_portable.cljk' nbb tools/mutate.cljk"}
+                     "MUTATE_CMD='kbb --backend sci --classpath src:test test/run_portable.cljk' kbb --backend sci tools/mutate.cljk"}
   ;; The engine — rows->datoms / build-db / q — is pure and hosts nothing.
   ;; The one host edge is `kotoba-actors.datomic/read-text`: `slurp` on the
   ;; JVM, `node:fs` under ClojureScript.

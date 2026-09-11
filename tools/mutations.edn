@@ -21,9 +21,9 @@
 ;;
 ;; ⚠ RUN THE TABLE TWICE. `MUTATE_CMD` picks the suite:
 ;;
-;;   KOTOBA_ACTORS_ETZHAYYIM_ROOT=<…> nbb tools/mutate.cljk
-;;   KOTOBA_ACTORS_ETZHAYYIM_ROOT=<…> MUTATE_CMD='nbb --classpath src:test test/run_portable.cljk' \
-;;     nbb tools/mutate.cljk
+;;   KOTOBA_ACTORS_ETZHAYYIM_ROOT=<…> kbb --backend sci tools/mutate.cljk
+;;   KOTOBA_ACTORS_ETZHAYYIM_ROOT=<…> MUTATE_CMD='kbb --backend sci --classpath src:test test/run_portable.cljk' \
+;;     kbb --backend sci tools/mutate.cljk
 ;;
 ;; A reader conditional has two branches and a one-runtime harness can only
 ;; see one of them. `:the-clj-read-opens-the-path-it-was-given` and
