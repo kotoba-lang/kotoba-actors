@@ -6,7 +6,7 @@
 ;; appearance of it, and a `:cljs` branch nothing runs is a check that cannot
 ;; fail.
 ;;
-;;   nbb --classpath src:test test/run_portable.cljs
+;;   nbb --classpath src:test test/run_portable.cljk
 ;;
 ;; ## It does not have to run from the repo root
 ;;
@@ -15,7 +15,7 @@
 ;; so the working directory does not enter into it. Run it from anywhere:
 ;;
 ;;   cd /tmp/elsewhere && nbb --classpath <repo>/src:<repo>/test \
-;;     <repo>/test/run_portable.cljs
+;;     <repo>/test/run_portable.cljk
 ;;
 ;; ## What needs data and what does not
 ;;
