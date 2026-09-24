@@ -46,7 +46,7 @@
   `q` refuses a nil db. An empty db (`{}`, from an empty seed) still answers
   normally — the distinction being kept is between \"nothing there\" and
   \"nobody looked\"."
-  (:require [clojure.edn :as edn]
+  (:require [kotoba.lang.edn :as edn]
             [kotoba.lang.text :as str]
             #?(:cljs ["node:fs" :as fs])))
 
