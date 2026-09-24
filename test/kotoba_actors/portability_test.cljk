@@ -15,7 +15,7 @@
   — a graph with 0 nodes, an index with no entries, a path that opens
   somewhere real. None of these say a word about missing data at the point
   the answer is produced, which is why they need saying here."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [kotoba-actors.config :as config]
             [kotoba-actors.datomic :as d]))
 

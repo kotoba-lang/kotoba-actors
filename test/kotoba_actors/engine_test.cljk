@@ -1,7 +1,7 @@
 (ns kotoba-actors.engine-test
   "Locks the kotoba-actors.datomic engine extensions: `_` wildcard, `:in` inputs,
   and id-less (edge / 縁) row ingest as first-class queryable datoms."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [kotoba-actors.datomic :as d]))
 
 (def rows

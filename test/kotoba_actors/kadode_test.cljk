@@ -1,5 +1,5 @@
 (ns kotoba-actors.kadode-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [kotoba-actors.kadode :as kadode]
             [kotoba-actors.config :as config]
             [kotoba-actors.datomic :as d]))

@@ -2,7 +2,7 @@
   "Spec for the kotoba-datomic refactor of uchiwake 内訳. Numbers are pinned
   against uchiwake's live seed (seed-products.kotoba.edn) — the same facts the
   Python actor reports. GREEN here == the clj/datomic refactor is at parity."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [kotoba-actors.uchiwake :as u]))
 
 (deftest seed-parity

@@ -9,7 +9,7 @@
   `kotoba-actors.datomic` engine directly with a 2-clause join over the real
   seed, so it should PASS even while the actor is unimplemented (it pins that the
   engine + seed wiring is correct)."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [kotoba-actors.config :as config]
             [kotoba-actors.datomic :as d]
             [kotoba-actors.inochi :as inochi]))
