@@ -19,7 +19,7 @@
   NOT present in the db and CANNOT be reached through `d/q`. Edge-facing fns must
   read the raw rows via `d/load-rows` (the allowed I/O edge) and filter on
   `:en/from`. There are 31 edges in the live seed."
-  (:require [clojure.set :as set]
+  (:require [kotoba.lang.coll :as set]
             [kotoba-actors.config :as config]
             [kotoba-actors.datomic :as d]))
 

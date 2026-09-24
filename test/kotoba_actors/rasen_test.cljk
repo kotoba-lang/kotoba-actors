@@ -3,7 +3,7 @@
   seed (see discovery in rasen.clj docstrings). Every assertion that touches a
   stub fn is expected to be RED (the stub throws `todo:`); the one direct d/q
   sanity test below uses the engine only and may PASS."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [kotoba-actors.rasen :as rasen]
             [kotoba-actors.datomic :as d]
             [kotoba-actors.config :as config]))

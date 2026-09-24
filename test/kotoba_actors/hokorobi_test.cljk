@@ -5,7 +5,7 @@
   currently throw \"todo: ...\"), so the suite is RED by construction until kimi
   implements them. The final test exercises the engine `d/q` directly and is the
   only one expected to PASS while the stubs are unimplemented."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [kotoba-actors.hokorobi :as hk]
             [kotoba-actors.datomic :as d]
             [kotoba-actors.config :as config]))

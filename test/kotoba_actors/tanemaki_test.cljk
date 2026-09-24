@@ -7,7 +7,7 @@
   Exact numbers were measured from the seed:
     instruments 3 · screens 6 · criteria 8 · sources 7 · orgs 8 · milestones 2
     total 縁 edge rows 77 · dangling endpoints {} (closure holds)."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [kotoba-actors.config :as config]
             [kotoba-actors.tanemaki :as t]
             [kotoba-actors.datomic :as d]))

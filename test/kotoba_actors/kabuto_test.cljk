@@ -2,7 +2,7 @@
   "Spec for the kotoba-datomic refactor of kabuto 兜. These numbers are pinned
   against kabuto's live seed (seed-public-companies.kotoba.edn) — the same facts
   the Python actor reports. GREEN here == the clj/datomic refactor is at parity."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [kotoba-actors.datomic :as d]
             [kotoba-actors.kabuto :as k]))
 

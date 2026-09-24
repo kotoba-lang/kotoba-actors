@@ -4,7 +4,7 @@
   that throw \"todo: ...\", so every assertion that calls them is RED until the
   bodies are implemented. The final test uses the engine (d/q) directly to prove
   the substrate + seed wiring are sound independent of the stubs."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [kotoba-actors.hoshimori :as h]
             [kotoba-actors.datomic :as d]
             [kotoba-actors.config :as config]))

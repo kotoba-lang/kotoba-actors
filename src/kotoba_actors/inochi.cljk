@@ -18,7 +18,7 @@
   Every analysis fn below is a STUB: it throws `ex-info` with a \"todo:\" message.
   kimi will implement each body so the RED test in
   `test/kotoba_actors/inochi_test.clj` turns GREEN."
-  (:require [clojure.set :as set]
+  (:require [kotoba.lang.coll :as set]
             [kotoba-actors.config :as config]
             [kotoba-actors.datomic :as d]))
 

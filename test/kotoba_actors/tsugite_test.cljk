@@ -5,7 +5,7 @@
   are expected to be RED (throwing `todo:`) until implemented. The final test
   is a direct engine sanity test of `d/q` with a 2-clause join and does NOT
   touch any stub."
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [kotoba-actors.tsugite :as tsugite]
             [kotoba-actors.datomic :as d]
             [kotoba-actors.config :as config]))
